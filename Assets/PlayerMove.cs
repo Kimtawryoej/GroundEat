@@ -39,6 +39,7 @@ public class PlayerMove : MonoBehaviour
             transform.position = (GameSystem.Instance.cam.ScreenToWorldPoint(currentPos));
             FloodFill.Instance.playerTransform((int)currentPos.x, (int)currentPos.y);
             //Debug.Log((int)currentPos.x + ":" + (int)currentPos.y);
+            Debug.Log("palyer");
             return true;
         }
         return false;

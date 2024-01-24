@@ -24,13 +24,16 @@ public class FloodFill : SingleTone<FloodFill>
     #endregion
     #region FloodFill
     private Vector2Int point1;
-    private Vector2Int point2;
     private Stack<Vector2Int> points1 = new Stack<Vector2Int>();
     private HashSet<Vector2Int> points1Set = new HashSet<Vector2Int>();
+    private Vector2Int point2;
     private Stack<Vector2Int> points2 = new Stack<Vector2Int>();
     private HashSet<Vector2Int> points2Set = new HashSet<Vector2Int>();
     private HashSet<Vector2Int> selectPoint = new HashSet<Vector2Int>();
+    private bool check = true, bool1 = false, bool2 = false;
     #endregion
+
+
     public void FloodFill_S(Vector2Int starPos, Vector2Int CurrentPos)
     {
 
@@ -48,7 +51,7 @@ public class FloodFill : SingleTone<FloodFill>
             }
         }
 
-        while (points1.Count > 0 && points2.Count > 0)
+        while (points1.Count > 0 && points2.Count > 0/*check*/)
         {
             point1 = points1.Pop();
             point2 = points2.Pop();
@@ -57,29 +60,32 @@ public class FloodFill : SingleTone<FloodFill>
                 savePos = point1 + dir[i];
                 if (isVaild(savePos) && !points1Set.Contains(savePos))
                 {
-                    Debug.Log("원래 좌표" + starPos + "방향더한" + point1 + "=" + savePos.x + ":" + savePos.y + ":" + points1.Count + dir[i]);
+                    //Debug.Log("원래 좌표" + starPos + "방향더한" + point1 + "=" + savePos.x + ":" + savePos.y + ":" + points1.Count);
                     points1.Push(savePos);
                     points1Set.Add(savePos);
-                    //Texture.Instance.Background.sprite.texture.SetPixel(savePos.x, savePos.y, Texture.Instance.FillColor);
-                    //Texture.Instance.Background.sprite.texture.Apply();
+                    bool1 = true;
                 }
+                //Debug.Log(points1Set.Count);
 
                 savePos = point2 + dir[i];
                 if (isVaild(savePos) && !points2Set.Contains(savePos))
                 {
                     points2.Push(savePos);
                     points2Set.Add(savePos);
+                    bool2 = true;
                 }
-                //yield return null;
             }
+            //check = !bool1 || !bool2 ? false : true;
+            //bool1 = false; bool2 = false;
         }
-        Debug.Log("끝");
-        selectPoint = points1.Count <= 0 ? points1Set : points2Set;
+        //Debug.Log("끝");
+        selectPoint = !(points1.Count > 0) ? points1Set : points2Set;
+        //selectPoint = !bool1 ? points1Set : points2Set;
         foreach (Vector2Int point in selectPoint)
         {
             Texture.Instance.Background.sprite.texture.SetPixel(point.x, point.y, Texture.Instance.FillColor);
-            Texture.Instance.Background.sprite.texture.Apply();
         }
+        Texture.Instance.Background.sprite.texture.Apply();
         FloodFillSet(CurrentPos);
 
     }
@@ -118,9 +124,9 @@ public class FloodFill : SingleTone<FloodFill>
             if (Texture.Instance.resolution[BePosFill.Last().x, BePosFill.Last().y].Equals((int)floodFilltag.Wall))
             {
                 FloodFill_S(BePosFill.First(), BePosFill.Last());
-                //Debug.Log(BePosFill.First()+":"+BePosFill.Last());
             }
-            Texture.Instance.resolution[x, y] = (int)floodFilltag.LineColor; //함수 캐싱
+            else
+                Texture.Instance.resolution[x, y] = (int)floodFilltag.LineColor; //함수 캐싱
         }
     }
     private void FloodFillSet(Vector2Int SetPos)
@@ -129,11 +135,12 @@ public class FloodFill : SingleTone<FloodFill>
         {
             Texture.Instance.resolution[item.x, item.y] = (int)floodFilltag.Wall;
         }
+        Debug.Log("리셋");
         BePosFill.Clear();
-        BePosFill.Add(SetPos);
         points1.Clear();
         points2.Clear();
         points1Set.Clear();
         points2Set.Clear();
+        check = true; bool1 = false; bool2 = false;
     }
 }
