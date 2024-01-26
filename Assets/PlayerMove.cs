@@ -12,7 +12,6 @@ public class PlayerMove : MonoBehaviour
     #endregion
     private gathers gather;
     #endregion
-    public Vector3 XYZ;
     #region Method
     #region LifeCycle
     private void Start()
@@ -37,13 +36,10 @@ public class PlayerMove : MonoBehaviour
         if (GameSystem.Instance.moveCheck(currentPos))
         {
             transform.position = (GameSystem.Instance.cam.ScreenToWorldPoint(currentPos));
-            FloodFill.Instance.playerTransform((int)currentPos.x, (int)currentPos.y);
-            //Debug.Log((int)currentPos.x + ":" + (int)currentPos.y);
-            Debug.Log("palyer");
+            FloodFill.Instance.PlayerTransform(Mathf.RoundToInt(currentPos.x),Mathf.RoundToInt(currentPos.y));
             return true;
         }
         return false;
-        //FloodFill.Instance.FloodFill_S();
     }
     #endregion
     #endregion

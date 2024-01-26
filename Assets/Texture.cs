@@ -10,7 +10,7 @@ public class Texture : SingleTone<Texture>
     public Color FillColor { get; set; } = Color.yellow;
     [SerializeField] private SpriteRenderer background;
     public SpriteRenderer Background { get { return background; } }
-    public int[,] resolution { get; set; }
+    public FloodFilltag[,] resolution { get; set; }
 
 
     override public void Awake()
@@ -22,7 +22,7 @@ public class Texture : SingleTone<Texture>
     {
         CopytextureImage = Instantiate(textureImage);
         background.sprite = Sprite.Create(CopytextureImage, new Rect(0, 0, CopytextureImage.width, CopytextureImage.height), new Vector2(0.5f, 0.5f));
-        resolution = new int[Screen.width, Screen.height];
+        resolution = new FloodFilltag[Screen.width, Screen.height];
         ResolutionSet(Screen.width, Screen.height);
     }
     private void ResolutionSet(int maxWidth, int maxHeight)
@@ -34,8 +34,8 @@ public class Texture : SingleTone<Texture>
             while (width < maxWidth)
             {
                 resolution[width, height] = (width.Equals(0) || height.Equals(0)) || (width.Equals(1919) || height.Equals(1079))
-                    ? (int)floodFilltag.Wall
-                    : (int)floodFilltag.None;
+                    ? FloodFilltag.Wall
+                    : FloodFilltag.None;
                 ++width;
             }
             ++height;
@@ -43,11 +43,4 @@ public class Texture : SingleTone<Texture>
         }
     }
 
-    //public int Count(int type)
-    //{
-    //    var Count = (from int sameValue in resolution
-    //                 where sameValue.Equals(type)
-    //                 select sameValue).Count();
-    //    return Count;
-    //}
 }
