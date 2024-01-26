@@ -29,6 +29,7 @@ public class PlayerMove : MonoBehaviour
     {
         transform.position = GameSystem.Instance.cam.ScreenToWorldPoint(currentPos);
     }
+
     private bool Move()
     {
         xy = Input.GetButton("Horizontal") ? () => { gather.check = true; return new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0); } : () => { gather.check = false; return new Vector3(0, Input.GetAxisRaw("Vertical"), 0); };
@@ -36,11 +37,30 @@ public class PlayerMove : MonoBehaviour
         if (GameSystem.Instance.moveCheck(currentPos))
         {
             transform.position = (GameSystem.Instance.cam.ScreenToWorldPoint(currentPos));
-            FloodFill.Instance.PlayerTransform(Mathf.RoundToInt(currentPos.x),Mathf.RoundToInt(currentPos.y));
+            PlayerTransform(Mathf.RoundToInt(currentPos.x),Mathf.RoundToInt(currentPos.y));
             return true;
         }
         return false;
     }
+
+    public void PlayerTransform(int x, int y) //플레이어가 움직임에 따라 선을 그리는 함수
+    {
+        // Texture.Instance.resolution[x, y] 맵 노드
+        if ((FloodFill.Instance.BePosFill.Count.Equals(0) && Texture.Instance.resolution[x, y].Equals(FloodFilltag.None))
+            || FloodFill.Instance.BePosFill.Count > 0 && !Texture.Instance.resolution[x, y].Equals(FloodFilltag.LineColor))
+        {
+            Texture.Instance.Background.sprite.texture.SetPixel(x, y, Texture.Instance.FillColor);
+            Texture.Instance.Background.sprite.texture.Apply();
+            FloodFill.Instance.BePosFill.Add(new Vector2Int(x, y));
+            if (Texture.Instance.resolution[FloodFill.Instance.BePosFill.Last().x, FloodFill.Instance.BePosFill.Last().y].Equals(FloodFilltag.Wall))
+            {
+                FloodFill.Instance.FloodFill_S(FloodFill.Instance.BePosFill.First(), FloodFill.Instance.BePosFill.Last());
+            }
+            else
+                Texture.Instance.resolution[x, y] = FloodFilltag.LineColor;
+        }
+    }
     #endregion
+
     #endregion
 }
