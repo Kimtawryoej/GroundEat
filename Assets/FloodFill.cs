@@ -17,7 +17,11 @@ public class FloodFill : SingleTone<FloodFill>
     #region PlayerPos
     public HashSet<Vector2Int> BePosFill { get; set; } = new HashSet<Vector2Int>();
     #endregion
-
+    FloodFilltag[,] t;
+    private void Start()
+    {
+        t = Texture.Instance.resolution;
+    }
     float Count; // 실행횟수체크 변수
 
     public void FloodFill_S(Vector2Int starPos, Vector2Int CurrentPos) //플러드필
@@ -48,7 +52,7 @@ public class FloodFill : SingleTone<FloodFill>
             for (int i = 0; i < dir.Length; i++)
             {
                 savePos = pointData1.point + dir[i];
-                if (IsVaild(savePos) && !pointData1.pointsSet.Contains(savePos))
+                if (IsVaild(savePos) && !pointData1.pointsSet.Contains(savePos)) //해시 충돌 일어남
                 {
                     pointData1.points.Push(savePos);
                     pointData1.pointsSet.Add(savePos);
@@ -69,7 +73,6 @@ public class FloodFill : SingleTone<FloodFill>
             Texture.Instance.Background.sprite.texture.SetPixel(point.x, point.y, Texture.Instance.FillColor);
         }
         Texture.Instance.Background.sprite.texture.Apply();
-        Debug.Log(Count);
         FloodFillSet(CurrentPos);
 
     }
@@ -78,7 +81,7 @@ public class FloodFill : SingleTone<FloodFill>
     {
         if ((Pos.x >= 0 && Pos.y >= 0) && (Pos.x <= Screen.width && Pos.y <= Screen.height))
         {
-            if (Texture.Instance.resolution[Pos.x, Pos.y].Equals(FloodFilltag.None))
+            if (t[Pos.x, Pos.y] == FloodFilltag.None)
             {
                 return true;
             }
