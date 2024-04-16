@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    #region º¯¼ö
+    #region ë³€ìˆ˜
     #region Pos
     private Func<Vector3> xy;
     private Vector3 currentPos = new Vector3(0, 0, 10);
@@ -43,9 +43,9 @@ public class PlayerMove : MonoBehaviour
         return false;
     }
 
-    public void PlayerTransform(int x, int y) //ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÓ¿¡ µû¶ó ¼±À» ±×¸®´Â ÇÔ¼ö
+    public void PlayerTransform(int x, int y) //í”Œë ˆì´ì–´ê°€ ì›€ì§ìž„ì— ë”°ë¼ ì„ ì„ ê·¸ë¦¬ëŠ” í•¨ìˆ˜
     {
-        // Texture.Instance.resolution[x, y] ¸Ê ³ëµå
+        // Texture.Instance.resolution[x, y] ë§µ ë…¸ë“œ
         if ((FloodFill.Instance.BePosFill.Count.Equals(0) && Texture.Instance.resolution[x, y].Equals(FloodFilltag.None))
             || FloodFill.Instance.BePosFill.Count > 0 && !Texture.Instance.resolution[x, y].Equals(FloodFilltag.LineColor))
         {
